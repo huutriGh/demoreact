@@ -30,6 +30,5 @@ const rootReducer = (state, action) => {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  cart : null,
 });
 export default persistReducer(persistConfig, rootReducer);
