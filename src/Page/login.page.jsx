@@ -7,7 +7,6 @@ import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../redux/user/user.selector";
 
 const Login = ({ user, login }) => {
-
   /*
     user: chính là key user trong hàm mapStateToProp.
     login: chính là key login trong hàm mapDispatchToProp.
@@ -20,7 +19,7 @@ const Login = ({ user, login }) => {
     userName: "",
     password: "",
   });
-  
+
   // Tạo hàm xử lý input của người dùng. khi người dùng input thì cập nhật lại state cục bộ đã khai ở trên.
   const handleChange = (event) => {
     setUserLogin((preState) => ({
@@ -33,7 +32,7 @@ const Login = ({ user, login }) => {
   };
   // Tạo hàm xử lý khi user nhấn nút login.
   const handleLogin = () => {
-    // login chỗ này chính là prop ở trên. khi call login này thì chính là 
+    // login chỗ này chính là prop ở trên. khi call login này thì chính là
     login(userLogin);
   };
 
@@ -81,19 +80,7 @@ const Login = ({ user, login }) => {
             <Button variant="outlined">Register</Button>
           </Grid>
           <Grid item md={12} xs={12}>
-            {/*
-                currentUser: {
-                token: "",
-                requestToken: "",
-                userName: "",
-                role: [],
-              },
-              err: null,
-            */}
-            <TextField
-              label="Current User"
-              value={user.userName}
-            ></TextField>
+            <TextField label="Current User" value={user.userName}></TextField>
           </Grid>
         </Grid>
       </Paper>
@@ -106,7 +93,7 @@ const mapStateToProp = createStructuredSelector({
   //  * user: key của object, tự đặt tên. Tên này sẽ trở thành prop của React component (Login page).
   //  * selectCurrentUser: được tạo và export từ file user.selector.js, phải được import ở trên
   //  * Thực hiện tương tự cho các thông tin khác từ store.
-  user: selectCurrentUser, 
+  user: selectCurrentUser,
 });
 
 // Tạo function mapDispatchToProp để dispatch action vào store. dispatch ở đây là một parameter
@@ -116,7 +103,6 @@ const mapDispatchToProp = (dispatch) => ({
   //   vào store.
   // * signInStart: là action đã khai báo ở file user.action.js. Phải được import ở trên để sử dụng
   login: (loginInfo) => dispatch(signInStart(loginInfo)),
-
 });
 // dùng kết connect function truyền vào 2 parameter là mapStateToProp, mapDispatchToProp. connect phải được import ở trên.
 // connect có thể truyền hoặc không truyền parameter.

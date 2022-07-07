@@ -1,6 +1,7 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import { signInFailure, signInSuccess } from "./user.action";
 import UserActionTypes from "./user.type";
+import api from "../../api/client";
 
 /*
    Saga là một middleware :
@@ -8,40 +9,22 @@ import UserActionTypes from "./user.type";
       - Dispatch các action vào store thông qua các function mà lib cung cấp.
 */
 
-const callAPILogin = async () => {
-  const res = await fetch("https://localhost:44329/api/User/Login", {
-    method: "POST",
-    body: JSON.stringify({
-      userName: "tri123",
-      password: "Tri@mail.com123456",
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const data = await res.json();
-  return data;
+const callAPILogin = async (loginInfo) => {
+  try {
+    const res = api.post("/api/User/Login", loginInfo.payload);
+    return res;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-export function* login() {
+export function* login(loginInfo) {
   try {
-    const res = {
-      token: "",
-      requestToken: "",
-      userName: "huutri",
-      roles: ["GUEST", "ADMIN"],
-    };
-
-    // const res = yield call(callAPILogin);
-    // console.log("saga res: ", res);
-    // const currentUser = {
-    //   token: res.token,
-    //   requestToken: res.requestToken,
-    //   userName: res.userName,
-    //   role: res.userRoles,
-    // };
-    yield put(signInSuccess(res));
+    const res = yield call(callAPILogin, loginInfo);
+    console.log("res: ", res);
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("refreshToken", res.data.requestToken);
+    yield put(signInSuccess(res.data));
   } catch (error) {
     yield put(signInFailure(error));
   }
