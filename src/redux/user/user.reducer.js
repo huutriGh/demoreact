@@ -13,6 +13,7 @@ const INITIAL_STATE = {
     roles: [],
   },
   err: null,
+  status: "",
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +22,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentUser: action.payload,
+        status: UserActionTypes.SIGN_IN_SUCCESS
+      };
+    case UserActionTypes.EMAIL_SIGN_IN_PROCESSING:
+      return {
+        ...state,
+        status: UserActionTypes.EMAIL_SIGN_IN_PROCESSING,
       };
     case UserActionTypes.SIGN_IN_FAILURE:
       return {

@@ -4,9 +4,15 @@ import Container from "@mui/material/Container";
 import { connect } from "react-redux"; // thu vien ket noi view vao redux
 import { signInStart } from "./../redux/user/user.action"; // import action can su dung tren view. ( xu ly side effective: call api, write log ...)
 import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "../redux/user/user.selector";
+import LinearProgress from "@mui/material/LinearProgress";
+import {
+  selectCurrentUser,
+  selectLoginStatus,
+} from "../redux/user/user.selector";
+import UserActionTypes from "../redux/user/user.type";
 
-const Login = ({ user, login }) => {
+const Login = ({ user, login, status }) => {
+  console.log(status);
   /*
     user: chính là key user trong hàm mapStateToProp.
     login: chính là key login trong hàm mapDispatchToProp.
@@ -73,12 +79,18 @@ const Login = ({ user, login }) => {
             <Button
               variant="contained"
               sx={{ marginRight: "10px" }}
+              disabled={status === UserActionTypes.EMAIL_SIGN_IN_PROCESSING}
               onClick={handleLogin}
             >
               Login
             </Button>
             <Button variant="outlined">Register</Button>
           </Grid>
+          {status === UserActionTypes.EMAIL_SIGN_IN_PROCESSING ? (
+            <Grid item md={12} xs={12}>
+              <LinearProgress />
+            </Grid>
+          ) : null}
           <Grid item md={12} xs={12}>
             <TextField label="Current User" value={user.userName}></TextField>
           </Grid>
@@ -94,6 +106,7 @@ const mapStateToProp = createStructuredSelector({
   //  * selectCurrentUser: được tạo và export từ file user.selector.js, phải được import ở trên
   //  * Thực hiện tương tự cho các thông tin khác từ store.
   user: selectCurrentUser,
+  status: selectLoginStatus,
 });
 
 // Tạo function mapDispatchToProp để dispatch action vào store. dispatch ở đây là một parameter
