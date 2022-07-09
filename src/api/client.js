@@ -31,7 +31,7 @@ const accessTokenHoc = (previousAPI) => {
 instance.interceptors.request.use(
   function (config) {
     const token = localStorage.getItem("token");
-    config.headers.Authencation = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
 
