@@ -15,13 +15,13 @@ const accessTokenHoc = (previousAPI) => {
 
     if (res) {
       if (res.data.token && res.data.refreshToken) {
-        localStorage.setItem("token");
-        localStorage.setItem("refreshToken");
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         previousAPI.headers.Authorization = `Bearer ${token}`;
         return instance.request(previousAPI);
       } else {
-        localStorage.setItem("");
-        localStorage.setItem("");
+        localStorage.setItem("token", "");
+        localStorage.setItem("refreshToken", "");
       }
     }
   };
@@ -30,6 +30,7 @@ const accessTokenHoc = (previousAPI) => {
 
 instance.interceptors.request.use(
   function (config) {
+    console.log(config);
     const token = localStorage.getItem("token");
     config.headers.Authorization = `Bearer ${token}`;
     return config;

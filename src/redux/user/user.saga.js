@@ -1,7 +1,7 @@
-import { all, call, put, takeLatest, delay } from "redux-saga/effects";
-import { signInFailure, signInSuccess, signInProcessing } from "./user.action";
-import UserActionTypes from "./user.type";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 import api from "../../api/client";
+import { signInFailure, signInProcessing, signInSuccess } from "./user.action";
+import UserActionTypes from "./user.type";
 
 /*
    Saga là một middleware :
@@ -21,7 +21,7 @@ const callAPILogin = async (loginInfo) => {
 export function* login(loginInfo) {
   try {
     yield put(signInProcessing());
-    yield delay(10000);
+
     const res = yield call(callAPILogin, loginInfo);
     console.log("res: ", res);
     localStorage.setItem("token", res.data.token);

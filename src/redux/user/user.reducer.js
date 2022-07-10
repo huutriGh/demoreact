@@ -22,7 +22,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentUser: action.payload,
-        status: UserActionTypes.SIGN_IN_SUCCESS
+        status: UserActionTypes.SIGN_IN_SUCCESS,
       };
     case UserActionTypes.EMAIL_SIGN_IN_PROCESSING:
       return {
@@ -32,12 +32,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.SIGN_IN_FAILURE:
       return {
         ...state,
-        currentUser: null,
+        currentUser: INITIAL_STATE.currentUser,
         err: action.payload,
+        status: "",
       };
 
     default:
-      return { ...state };
+      return state ;
   }
 };
 export default userReducer;
