@@ -12,7 +12,6 @@ import {
 import UserActionTypes from "../redux/user/user.type";
 
 const Login = ({ user, login, status }) => {
-  console.log(status);
   /*
     user: chính là key user trong hàm mapStateToProp.
     login: chính là key login trong hàm mapDispatchToProp.
@@ -91,11 +90,10 @@ const Login = ({ user, login, status }) => {
               <LinearProgress />
             </Grid>
           ) : null}
-          
+
           <Grid item md={12} xs={12}>
             <TextField label="Current User" value={user.userName}></TextField>
           </Grid>
-          
         </Grid>
       </Paper>
     </Container>

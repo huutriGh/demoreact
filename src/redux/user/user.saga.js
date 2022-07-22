@@ -25,7 +25,7 @@ export function* login(loginInfo) {
     const res = yield call(callAPILogin, loginInfo);
     console.log("res: ", res);
     localStorage.setItem("token", res.data.token);
-    localStorage.setItem("refreshToken", res.data.requestToken);
+    localStorage.setItem("refreshToken", res.data.refreshToken);
     yield put(signInSuccess(res.data));
   } catch (error) {
     yield put(signInFailure(error));

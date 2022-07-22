@@ -107,6 +107,7 @@ const Product = ({ productList, status, createProduct }) => {
               color="secondary"
               variant="outlined"
               name="price"
+              type="number"
               value={product.price}
               onChange={handleChange}
             ></TextField>

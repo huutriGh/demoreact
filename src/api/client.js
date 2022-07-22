@@ -12,6 +12,7 @@ const accessTokenHoc = (previousAPI) => {
       token,
       refreshToken,
     });
+    console.log(res.data);
 
     if (res) {
       if (res.data.token && res.data.refreshToken) {
@@ -42,6 +43,9 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(null, function (error) {
+  console.log(
+    error.config && error.response?.status === 401 && !error.config.__isRetry
+  );
   if (
     error.config &&
     error.response?.status === 401 &&

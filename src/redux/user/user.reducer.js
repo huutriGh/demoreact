@@ -12,7 +12,7 @@ const INITIAL_STATE = {
     userName: "",
     roles: [],
   },
-  err: null,
+  errors: null,
   status: "",
 };
 
@@ -33,8 +33,8 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentUser: INITIAL_STATE.currentUser,
-        err: action.payload,
-        status: "",
+        errors: action.payload,
+        status: UserActionTypes.SIGN_IN_FAILURE,
       };
 
     default:
