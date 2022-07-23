@@ -4,7 +4,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux"; // thu vien ket noi view vao redux
 import { createStructuredSelector } from "reselect";
 import { createProductStart } from "../redux/product/product.action";
@@ -13,6 +13,7 @@ import {
   selectProductStatus,
 } from "../redux/product/product.selector";
 import productActionType from "../redux/product/product.type";
+import validate from "validate.js";
 
 const Product = ({ productList, status, createProduct }) => {
   const [product, setProduct] = useState({
@@ -23,6 +24,43 @@ const Product = ({ productList, status, createProduct }) => {
     images: [],
   });
 
+  // Validation
+  const [validation, setValidation] = useState({
+    touched: {},
+    errors: {},
+    isvalid: false,
+  });
+  useEffect(() => {
+    const schema = {
+      productName: {
+        presence: {
+          allowEmpty: false,
+          message: "^Product's name is required",
+        },
+        length: {
+          maximum: 50,
+          minimum: 10,
+          message: "^Ten san pham tu 10 den 50 ky tu",
+        },
+      },
+      price: {
+        presence: { allowEmpty: false, message: "^Price is required" },
+        numericality: {
+          onlyInteger: false,
+          greaterThan: 10,
+          lessThanOrEqualTo: 10000,
+          message: "^Price must be > 10 < 10000",
+        },
+      },
+    };
+    const errors = validate.validate(product, schema);
+    setValidation((pre) => ({
+      ...pre,
+      isvalid: errors ? false : true,
+      errors: errors || {},
+    }));
+  }, [product]);
+
   const handleChange = (event) => {
     setProduct((preState) => ({
       ...preState,
@@ -31,6 +69,17 @@ const Product = ({ productList, status, createProduct }) => {
           ? event.target.checked
           : event.target.value,
     }));
+    setValidation((pre) => ({
+      ...pre,
+      touched: {
+        ...pre.touched,
+        [event.target.name]: true,
+      },
+    }));
+  };
+
+  const hasError = (field) => {
+    return validation.touched[field] && validation.errors[field] ? true : false;
   };
 
   const handleCreateProduct = () => {
@@ -52,7 +101,7 @@ const Product = ({ productList, status, createProduct }) => {
   };
 
   const handleClick = (event) => {
-    event.target.value = '';
+    event.target.value = "";
   };
   return (
     <Container>
@@ -85,6 +134,12 @@ const Product = ({ productList, status, createProduct }) => {
               name="productName"
               value={product.productName}
               onChange={handleChange}
+              error={hasError("productName")}
+              helperText={
+                hasError("productName")
+                  ? validation.errors.productName[0]
+                  : null
+              }
             ></TextField>
           </Grid>
           <Grid item md={6} xs={12}>
@@ -110,19 +165,29 @@ const Product = ({ productList, status, createProduct }) => {
               type="number"
               value={product.price}
               onChange={handleChange}
+              error={hasError("price")}
+              helperText={hasError("price") ? validation.errors.price[0] : null}
             ></TextField>
           </Grid>
           <Grid item md={12} xs={12}>
             <Button size="medium" variant="outlined">
               Product's Image: &nbsp;
-              <input  type="file" name="image" onChange={handleImage} onClick={handleClick}/>
+              <input
+                type="file"
+                name="image"
+                onChange={handleImage}
+                onClick={handleClick}
+              />
             </Button>
           </Grid>
           <Grid item md={12} xs={12}>
             <Button
               variant="contained"
               sx={{ marginRight: "10px" }}
-              disabled={status === productActionType.CREATE_PRODUCT_PROCCESING}
+              disabled={
+                status === productActionType.CREATE_PRODUCT_PROCCESING ||
+                validation.isvalid === false
+              }
               onClick={handleCreateProduct}
             >
               Create
