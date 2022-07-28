@@ -14,6 +14,7 @@ import {
 } from "../redux/product/product.selector";
 import productActionType from "../redux/product/product.type";
 import validate from "validate.js";
+import baseURL from "../baseurl";
 
 const Product = ({ productList, status, createProduct }) => {
   const [product, setProduct] = useState({
@@ -204,8 +205,8 @@ const Product = ({ productList, status, createProduct }) => {
               {productList.map((item) => (
                 <ImageListItem key={item.productId}>
                   <img
-                    src={`https://localhost:44329/${item.imageUrl}`}
-                    srcSet={`https://localhost:44329/${item.imageUrl}`}
+                    src={`${baseURL}${item.imageUrl}`}
+                    srcSet={`${baseURL}${item.imageUrl}`}
                     alt={item.ProductName}
                     loading="lazy"
                   />

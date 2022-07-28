@@ -1,7 +1,8 @@
 import axios from "axios";
+import baseURL from "../baseurl";
 
 const instance = axios.create({
-  baseURL: "https://localhost:44329",
+  baseURL: baseURL,
 });
 
 const accessTokenHoc = (previousAPI) => {
